@@ -12,19 +12,29 @@ import java.util.NoSuchElementException;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
+import java.util.Collections;
 
 final class Questions {
     private List<Batch> batchList = new ArrayList<>();
     private int batchIndex = 0;
 
-    Questions(List<Line> lineList, int batchSize){
+    Questions(List<Line> lineList, int batchSize, boolean shuffle_batches, boolean shuffle_lines){
         if (batchSize > 0){
             for( int i = 0; i< lineList.size(); i+= batchSize){
                 batchList.add( new Batch(
                     lineList.subList(i, Math.min(i+batchSize, lineList.size()))
                 ));
             }
-        } else { this.batchList.add(new Batch(lineList)); }
+        } else { batchList.add(new Batch(lineList)); }
+
+        if (shuffle_batches){
+            Collections.shuffle( batchList );
+        }
+        if (shuffle_lines){
+            for (int i = 0; i < batchList.size(); i++){
+                batchList.set(i, getBatch(i).shuffle() );
+            }
+        }
     }
 
 
@@ -90,7 +100,8 @@ final class Questions {
 
     // make filePaths an args?
     static Questions fromFiles(List<String> filePaths, int batchSize, List<String> splits,
-    List<String> singleLineComments, List<List<String>> multiLineComments) {
+    List<String> singleLineComments, List<List<String>> multiLineComments,
+    boolean shuffle_batches, boolean shuffle_lines) {
         List<Line> lineList = new ArrayList<>();
        String lines = "";
         for (String file_path : filePaths) {
@@ -110,7 +121,7 @@ final class Questions {
             lineList.addAll(parseRawTxt(lines, splits, singleLineComments,
                 multiLineComments));
         }
-        return new Questions(lineList, batchSize);
+        return new Questions(lineList, batchSize, shuffle_batches, shuffle_lines);
     }
 
 

@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.function.Function;
 import java.util.function.Predicate;
+import java.util.Collections;
 
 final public class Batch {
     private List<Line> lineList;
@@ -92,6 +93,12 @@ final public class Batch {
             if( !( l.partialEquals(line) ) ) return false;
         }
         return true;
+    }
+
+    Batch shuffle(){
+        List<Line> shuffledLineList = this.lineList;
+        Collections.shuffle(shuffledLineList);
+        return new Batch( shuffledLineList );
     }
 
 

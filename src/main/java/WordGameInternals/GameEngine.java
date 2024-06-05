@@ -247,7 +247,9 @@ public final class GameEngine { // TODO: Make it a Singleton
      */
     void newGameFromLineList(List<Line> lineList){
         int bs = gameSettings.batchSize.getValue();
-        questions = new Questions(lineList, bs);
+        questions = new Questions(lineList, bs,
+        gameSettings.randomBatch.getValue(), gameSettings.randomLineInBatch.getValue());
+
         answerSubmitted = false;
         gameState = GameState.ONGOING;
     }
@@ -262,8 +264,10 @@ public final class GameEngine { // TODO: Make it a Singleton
     public void newGameFromFileList(List<String> fileList){
         questions = Questions.fromFiles(fileList,
             gameSettings.batchSize.getValue(), gameSettings.splits.getValue(),
-            gameSettings.slComments.getValue(), gameSettings.mlComments.getValue());
+            gameSettings.slComments.getValue(), gameSettings.mlComments.getValue(),
+            gameSettings.randomBatch.getValue(), gameSettings.randomLineInBatch.getValue());
 
+        answerSubmitted = false;
         gameState = GameState.ONGOING;
     }
 

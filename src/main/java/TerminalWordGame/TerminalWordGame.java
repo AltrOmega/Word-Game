@@ -12,7 +12,7 @@ public class TerminalWordGame {
 
     private static void gameLoop(GameEngine gameEngine){
         GameEngine ge = gameEngine;
-        System.out.println(ge);
+        //System.out.println(ge);
         while(ge.getGameState() != GameState.ENDED){
             Scanner scanner = new Scanner(System.in);
             String stage_1 = ge.getQuestionStage(" - ");

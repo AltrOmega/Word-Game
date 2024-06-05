@@ -16,13 +16,13 @@ public final class GameSettings{
             value -> value >= 0
     );
 
-    Setting<Boolean> randomBatch = new Setting<>( // Not implemented
+    Setting<Boolean> randomBatch = new Setting<>( // Implemented
             "Random batch",
             "Toggles if you want to randomise the order of batches.",
             false
     );
 
-    Setting<Boolean> randomLineInBatch = new Setting<>( // Not implemented
+    Setting<Boolean> randomLineInBatch = new Setting<>( // Implemented
             "Random line in batch",
             "Toggles if you want to randomise the order of lines inside a batch.",
             false
