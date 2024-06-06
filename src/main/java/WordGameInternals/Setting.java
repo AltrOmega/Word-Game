@@ -11,13 +11,15 @@ public class Setting<T> {
     private T value;
     private ValueValidator<T> valueValidator;
 
+
+
     /**
      * Functional interface for validating the setting's value.
      *
      * @param <T> the type of the value to validate
      */
     @FunctionalInterface
-    interface ValueValidator<T> {
+    public interface ValueValidator<T> {
         /**
          * Checks if the provided value is valid.
          *
@@ -26,6 +28,8 @@ public class Setting<T> {
          */
         boolean check_valid(T value);
     }
+
+
 
     /**
      * Checks if the provided value is legal according to the validator.
@@ -36,6 +40,8 @@ public class Setting<T> {
     public boolean valueIsLegal(T value) {
         return valueValidator.check_valid(value);
     }
+
+
 
     /**
      * Constructs a new Setting with a default value and no specific validation.
@@ -51,6 +57,8 @@ public class Setting<T> {
         this.valueValidator = (value) -> true;
     }
 
+
+
     /**
      * Constructs a new Setting with a default value and a custom validator.
      *
@@ -63,6 +71,8 @@ public class Setting<T> {
         this(name, description, default_value);
         this.valueValidator = valueValidator;
     }
+
+
 
     public String getName() { return name; }
 

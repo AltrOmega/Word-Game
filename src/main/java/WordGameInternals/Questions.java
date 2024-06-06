@@ -14,10 +14,22 @@ import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 import java.util.Collections;
 
+
 final class Questions {
     private List<Batch> batchList = new ArrayList<>();
     private int batchIndex = 0;
 
+
+//------------------------------ Constructors
+    /**
+    * Constructs a Questions object from a list of Line objects, organizing them into batches.
+    * Optionally shuffles the batches and lines within batches.
+    *
+    * @param lineList the list of Line objects to be organized into batches.
+    * @param batchSize the size of each batch.
+    * @param shuffle_batches if true, shuffles the batches.
+    * @param shuffle_lines if true, shuffles the lines within each batch.
+    */
     Questions(List<Line> lineList, int batchSize, boolean shuffle_batches, boolean shuffle_lines){
         if (batchSize > 0){
             for( int i = 0; i< lineList.size(); i+= batchSize){
@@ -39,71 +51,25 @@ final class Questions {
 
 
 
-
-
-    @Override
-    public boolean equals(Object obj) {
-        if( obj == this)
-            return true;
-        if( !( obj instanceof Questions) )
-            return false;
-
-        Questions q = (Questions) obj;
-        if ( q.batchList.size() != batchList.size() )
-            return false;
-
-        for( int i = 0; i < q.batchList.size(); i++) {
-            var b = q.batchList.get(i);
-            var batch = batchList.get(i);
-            if ( !( b.equals(batch) ) ) return false;
-        }
-        return true;
-    }
-
     /**
-     * Checks equality using only the most significant field of Line: left, right, split
+     * Creates a Questions object from a list of file paths, parsing each file into lines,
+     * and organizing them into batches.
      *
-     * @param obj The Object to be comapred line in a standard .equals()
-     * @return boolean Are the most significant fields of all Line's
-     *                 inside this Questions Object equal to obj's?
+     * @param filePaths the list of file paths to read and parse.
+     * @param batchSize the size of each batch.
+     * @param splits the list of strings used to split lines into two parts.
+     * @param singleLineComments the list of single-line comment start sequences.
+     * @param multiLineComments the list of multi-line comment start and end sequences.
+     * @param shuffle_batches if true, shuffles the batches.
+     * @param shuffle_lines if true, shuffles the lines within each batch.
+     * @return Questions, the created Questions object.
      */
-    public boolean partialEquals(Object obj) {
-        if( obj == this)
-            return true;
-        if( !( obj instanceof Questions) )
-            return false;
-
-        Questions q = (Questions) obj;
-        if ( q.batchList.size() != batchList.size() )
-            return false;
-
-        for( int i = 0; i < q.batchList.size(); i++) {
-            var b = q.batchList.get(i);
-            var batch = batchList.get(i);
-            if ( !( b.partialEquals(batch) ) ) return false;
-        }
-        return true;
-    }
-
-
-
-
-
-    @Override
-    public String toString() {
-        String ret = "Questions: \n";
-        for( int i = 0; i < batchList.size(); i++){
-            ret += "--- " + String.valueOf(i+1) + ". " + batchList.get(i).toString() + "\n";
-        }
-        return ret;
-    }
-
     // make filePaths an args?
     static Questions fromFiles(List<String> filePaths, int batchSize, List<String> splits,
-    List<String> singleLineComments, List<List<String>> multiLineComments,
-    boolean shuffle_batches, boolean shuffle_lines) {
+                               List<String> singleLineComments, List<List<String>> multiLineComments,
+                               boolean shuffle_batches, boolean shuffle_lines) {
         List<Line> lineList = new ArrayList<>();
-       String lines = "";
+        String lines = "";
         for (String file_path : filePaths) {
             try {
                 lines += new String(Files.readAllBytes(Paths.get(file_path)), StandardCharsets.UTF_8);
@@ -119,7 +85,7 @@ final class Questions {
             }
 
             lineList.addAll(parseRawTxt(lines, splits, singleLineComments,
-                multiLineComments));
+                    multiLineComments));
         }
         return new Questions(lineList, batchSize, shuffle_batches, shuffle_lines);
     }
@@ -128,6 +94,10 @@ final class Questions {
 
 
 
+
+
+
+//------------------------------ Simple Utility
     /**
      * Calculates the total number of lines across all batches in the batch list.
      *
@@ -142,6 +112,8 @@ final class Questions {
         return count;
     }
 
+
+
     /**
      * Retrieves the total number of batches in the batch list.
      *
@@ -149,12 +121,16 @@ final class Questions {
      */
     int getBatchCount(){ return batchList.size(); }
 
+
+
     /**
      * Checks if there are more elements in the batch list to process.
      *
      * @return true if more elements are available, false otherwise.
      */
     boolean hasNext() { return batchIndex < batchList.size()-1; }
+
+
 
     /**
      * Moves to the next element in the batch list by incrementing the batch index.
@@ -169,6 +145,8 @@ final class Questions {
         batchIndex++;
     }
 
+
+
     /**
      * Retrieves a Batch obj from the batch list at the specified index.
      *
@@ -178,12 +156,18 @@ final class Questions {
      */
     Batch getBatch(int index){ return (batchList.get(index)); }
 
+
+
     /**
      * Retrieves the current batch based on the current batch index.
      *
      * @return Batch The current batch as per the batch index.
      */
+
+
     Batch getCurrentBatch(){ return getBatch(batchIndex); }
+
+
 
     /**
      * Retrieves the current line from the current batch.
@@ -194,12 +178,15 @@ final class Questions {
         return getCurrentBatch().getCurrentLine();
     }
 
+
+
     /**
      * Returns the index of the current batch.
      *
      * @return int The index of the current batch being processed.
      */
     int getBatchIndex(){ return batchIndex; }
+
 
 
     /**
@@ -216,6 +203,14 @@ final class Questions {
                 .collect(Collectors.toList());
     }
 
+
+
+
+
+
+
+
+//------------------------------ String parsing and comments handling
     /**
      * Removes all occurrences of comments from the given string.
      *
@@ -239,14 +234,7 @@ final class Questions {
         return input;
     }
 
-    public static void main(String[] args) {
-        String text = "two  \"\"\"   ball   \n   ball   \"\"\"   trzy";
 
-        System.out.println("TEXT: " + text);
-
-        System.out.println("REPLACE: " + Questions.removeComments(text, "\"\"\"", "\"\"\""));
-
-    }
 
     /**
      * Searches for the first occurrence of a specified substring in the given string * that is not preceded by an escape character. *
@@ -266,6 +254,8 @@ final class Questions {
         return ocurence;
     }
 
+
+
     /**
      * Removes the escape character before all occurrences of a specified substring
      * within the given string.
@@ -281,8 +271,6 @@ final class Questions {
         }
         return toParse;
     }
-
-
 
 
 
@@ -344,4 +332,75 @@ final class Questions {
         return lineList;
     }
 
+
+
+
+
+
+
+
+//------------------------------ Overrides and similar
+    /**
+     * Compares this Questions to the specified object for full equality.
+     *
+     * @param obj the object to compare to
+     * @return true if the specified object is equal to this Line, false otherwise
+     */
+    @Override
+    public boolean equals(Object obj) {
+        if( obj == this)
+            return true;
+        if( !( obj instanceof Questions) )
+            return false;
+
+        Questions q = (Questions) obj;
+        if ( q.batchList.size() != batchList.size() )
+            return false;
+
+        for( int i = 0; i < q.batchList.size(); i++) {
+            var b = q.batchList.get(i);
+            var batch = batchList.get(i);
+            if ( !( b.equals(batch) ) ) return false;
+        }
+        return true;
+    }
+
+
+
+    /**
+     * Checks equality using only the most significant field of Line: left, right, split, using
+     * partialEquals of each batch in batchList
+     *
+     * @param obj The Object to be compared
+     * @return boolean Are the most significant fields of all Line's
+     *                 inside this Questions Object equal to obj's?
+     */
+    public boolean partialEquals(Object obj) {
+        if( obj == this)
+            return true;
+        if( !( obj instanceof Questions) )
+            return false;
+
+        Questions q = (Questions) obj;
+        if ( q.batchList.size() != batchList.size() )
+            return false;
+
+        for( int i = 0; i < q.batchList.size(); i++) {
+            var b = q.batchList.get(i);
+            var batch = batchList.get(i);
+            if ( !( b.partialEquals(batch) ) ) return false;
+        }
+        return true;
+    }
+
+
+
+    @Override
+    public String toString() {
+        String ret = "Questions: \n";
+        for( int i = 0; i < batchList.size(); i++){
+            ret += "--- " + String.valueOf(i+1) + ". " + batchList.get(i).toString() + "\n";
+        }
+        return ret;
+    }
 }

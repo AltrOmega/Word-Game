@@ -11,16 +11,47 @@ public final class GameEngine { // TODO: Make it a Singleton
     private boolean answerSubmitted = false;
 
 
+//------------------------------ Constructors
+    /**
+     * Initializes a new game using a list of lines, setting up the questions and
+     * batches according to the game settings.
+     *
+     * @param lineList The list of lines to be used for the game.
+     */
+    void newGameFromLineList(List<Line> lineList){
+        int bs = gameSettings.batchSize.getValue();
+        questions = new Questions(lineList, bs,
+                gameSettings.randomBatch.getValue(), gameSettings.randomLineInBatch.getValue());
+
+        answerSubmitted = false;
+        gameState = GameState.ONGOING;
+    }
+
+
 
     /**
-     * Retrieves the current game state.
+     * Starts a new game using a list of file paths that contain question data.
      *
-     * @return the current GameState enum held by this instance.
+     * @param fileList List of relative or absolute file paths containing the questions.
      */
-    public GameState getGameState(){ return this.gameState; }
+    public void newGameFromFileList(List<String> fileList){
+        questions = Questions.fromFiles(fileList,
+                gameSettings.batchSize.getValue(), gameSettings.splits.getValue(),
+                gameSettings.slComments.getValue(), gameSettings.mlComments.getValue(),
+                gameSettings.randomBatch.getValue(), gameSettings.randomLineInBatch.getValue());
+
+        answerSubmitted = false;
+        gameState = GameState.ONGOING;
+    }
 
 
 
+
+
+
+
+
+//------------------------------ Functions
     /**
      * Updates the `currentQuestionSide` based on the randomization setting.
      */
@@ -173,7 +204,6 @@ public final class GameEngine { // TODO: Make it a Singleton
             return;
         }
 
-        //Just in case i forgot ..... a case
         throw new IllegalStateException("Unhandled nextQuestion state");
     }
 
@@ -239,48 +269,20 @@ public final class GameEngine { // TODO: Make it a Singleton
 
 
 
-    /**
-     * Initializes a new game using a list of lines, setting up the questions and
-     * batches according to the game settings.
-     *
-     * @param lineList The list of lines to be used for the game.
-     */
-    void newGameFromLineList(List<Line> lineList){
-        int bs = gameSettings.batchSize.getValue();
-        questions = new Questions(lineList, bs,
-        gameSettings.randomBatch.getValue(), gameSettings.randomLineInBatch.getValue());
-
-        answerSubmitted = false;
-        gameState = GameState.ONGOING;
-    }
 
 
 
-    /**
-     * Starts a new game using a list of file paths that contain question data.
-     *
-     * @param fileList List of relative or absolute file paths containing the questions.
-     */
-    public void newGameFromFileList(List<String> fileList){
-        questions = Questions.fromFiles(fileList,
-            gameSettings.batchSize.getValue(), gameSettings.splits.getValue(),
-            gameSettings.slComments.getValue(), gameSettings.mlComments.getValue(),
-            gameSettings.randomBatch.getValue(), gameSettings.randomLineInBatch.getValue());
-
-        answerSubmitted = false;
-        gameState = GameState.ONGOING;
-    }
 
 
-
+//------------------------------ Simple Utility
     @Override
     public String toString() {
         return this.questions.toString();
     }
 
-    public int calcTotalLineCount(){
-        return questions.calcLineCount();
-    }
+    public int calcTotalLineCount(){ return questions.calcLineCount(); }
+
+    public GameState getGameState(){ return this.gameState; }
 
     public int getBatchCount(){
         return questions.getBatchCount();
@@ -298,8 +300,4 @@ public final class GameEngine { // TODO: Make it a Singleton
 
     // TODO: write
     public int getGlobalLinePos(){ return 1;}
-
-
-    // TODO: place similar function near each other for ease of use
-
 }

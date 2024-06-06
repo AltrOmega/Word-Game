@@ -68,7 +68,7 @@ public final class GameSettings{
 
     // ignoring this setting for now
     // showMisCount shows score as well for now
-    Setting<Boolean> showScore = new Setting<>( // Implemented
+    Setting<Boolean> showScore = new Setting<>( // Not Implemented
             "Show score",
             "Toggles the display of the right answer percentage.",
             true
@@ -99,7 +99,12 @@ public final class GameSettings{
     );
 
 
-
+    /**
+     * Converts the GameSettings to a list for easy iteration over each setting.
+     * Only includes settings that are currently implemented.
+     *
+     * @return A list containing the implemented GameSettings
+     */
     public List<Setting> toList() {
         return List.of(
                 //repeatAtPoint,
@@ -112,7 +117,7 @@ public final class GameSettings{
                 //whiteSpaceSensitive,
                 showPosition,
                 showMistakeCount,
-                showScore,
+                //showScore,
                 //autoClear,
                 splits
                 //slComments,

@@ -20,6 +20,8 @@ public final class NumMenu {
         this.OPTIONS = new ArrayList<>();
     }
 
+
+
     /**
      * Constructs a new NumMenu with custom menu text.
      *
@@ -30,6 +32,14 @@ public final class NumMenu {
         this.OPTIONS = new ArrayList<>();
     }
 
+
+
+
+
+
+
+
+
     /**
      * Adds an option to the menu with the specified text and action.
      *
@@ -39,6 +49,8 @@ public final class NumMenu {
     public void addOption(String optionText, Runnable action) {
         this.OPTIONS.add(new Option(optionText, action));
     }
+
+
 
     /**
      * Adds an option to the menu with the specified text, action, and whether it allows returning to a previous menu.
@@ -52,6 +64,8 @@ public final class NumMenu {
         this.OPTIONS.add(new Option(optionText, action, getBack));
     }
 
+
+
     /**
      * Adds an exit option to the menu with the specified text.
      *
@@ -61,6 +75,14 @@ public final class NumMenu {
         this.OPTIONS.add(new Option(optionText));
     }
 
+
+
+
+
+
+
+
+
     /**
      * A class representing an individual menu option.
      */
@@ -69,6 +91,8 @@ public final class NumMenu {
         private Runnable ACTION;
         private boolean exit = false;
         private boolean getBack = false;
+
+
 
         /**
          * Constructs a new Option with the specified text and action.
@@ -80,6 +104,8 @@ public final class NumMenu {
             this.OPTION_TEXT = optionText;
             this.ACTION = action;
         }
+
+
 
         /**
          * Constructs a new Option with the specified text, action, and whether it automatically returns to the previous menu.
@@ -93,6 +119,8 @@ public final class NumMenu {
             this.ACTION = action;
             this.getBack = getBack;
         }
+
+
 
         /**
          * Constructs a new exit Option with the specified text.
@@ -109,6 +137,14 @@ public final class NumMenu {
             return this.OPTION_TEXT;
         }
     }
+
+
+
+
+
+
+
+
 
     /**
      * Prompts the user to choose an action and ensures the choice is valid.
@@ -131,6 +167,8 @@ public final class NumMenu {
             System.out.println("Your choice must be a number between 1 and " + max_inclusive);
         }
     }
+
+
 
     /**
      * Displays the menu and processes user choices in a loop until an exit option is chosen,
