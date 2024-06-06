@@ -179,9 +179,6 @@ public class TerminalWordGame {
             }
         }
 
-        // TODO: Don't know why but closing scanners seems to always lead to errors even if in a
-        // TODO: Try block -> Investigate
-        //scanner.close();
         return setTo;
     }
 
@@ -325,8 +322,6 @@ public class TerminalWordGame {
                 func = listSettingChangeMenu(setting);
             }
 
-            // At the end throw an error
-
             menu.addOption(
                 setting.getName() + ": " + setting.getValue().toString(),
                 func,
@@ -334,6 +329,17 @@ public class TerminalWordGame {
             );
 
             if ( i == settingsList.size() ){
+                menu.addOption("Show descriptions",
+                () -> {
+                    List<Setting> sl = gs.toList();
+                    String print_ = "";
+                    for (int j = 1; j <= sl.size(); j++){
+                        Setting setting_ = sl.get(j-1);
+                        print_ += j + ". " + setting_.getName() + ": " + setting_.getValue() + "\n" +
+                            setting_.get_description() + "\n-----\n";
+                    }
+                    System.out.println(print_);
+                });
                 menu.addOption("Exit this submenu");
             }
         }

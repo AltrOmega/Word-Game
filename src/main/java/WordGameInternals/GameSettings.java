@@ -102,21 +102,21 @@ public final class GameSettings{
 
     public List<Setting> toList() {
         return List.of(
-                repeatAtPoint,
+                //repeatAtPoint,
                 batchSize,
                 randomBatch,
                 randomLineInBatch,
                 fromSide,
-                typingMode,
-                caseSensitive,
-                whiteSpaceSensitive,
+                //typingMode,
+                //caseSensitive,
+                //whiteSpaceSensitive,
                 showPosition,
                 showMistakeCount,
                 showScore,
-                autoClear,
-                splits,
-                slComments,
-                mlComments
+                //autoClear,
+                splits
+                //slComments,
+                //mlComments
         );
     }
 
@@ -132,3 +132,4 @@ public final class GameSettings{
         return ret;
     }
 }
+// add show descriptions to setttings TODO

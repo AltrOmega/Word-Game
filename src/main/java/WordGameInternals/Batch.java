@@ -2,8 +2,6 @@ package WordGameInternals;
 
 import java.util.List;
 import java.util.NoSuchElementException;
-import java.util.function.Function;
-import java.util.function.Predicate;
 import java.util.Collections;
 
 final public class Batch {
