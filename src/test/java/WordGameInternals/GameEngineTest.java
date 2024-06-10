@@ -1,5 +1,6 @@
 package WordGameInternals;
 import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
 import java.util.List;
@@ -61,7 +62,7 @@ class GameEngineTest {
     }
 
     @Test
-    // error on get curr answ TODO: fix
+    @DisplayName("Verify getCurrentSideStr functions return the appropriate non random values of Side")
     void getCurrentAnswerSideStr() {
         GameEngine ge = new GameEngine();
         ge.newGameFromLineList(List.of(new Line("left", "right", " - ")));
@@ -71,6 +72,40 @@ class GameEngineTest {
 
         ge.gameSettings.fromSide.setValue(Side.RIGHT);
         Assertions.assertEquals("left", ge.getCurrentAnswerSideStr());
+    }
+
+    @Test
+    @DisplayName("Verify getCurrentSideStr functions random return does not output the same side for answer and question")
+    void getCurrentAnswerSideStr_2() {
+        GameEngine ge = new GameEngine();
+        ge.newGameFromLineList(List.of(new Line("left", "right", " - ")));
+
+
+        ge.gameSettings.fromSide.setValue(Side.RANDOM);
+        Assertions.assertEquals(false, ge.getCurrentAnswerSideStr() == ge.getCurrentQuestionSideStr());
+
+        ge.gameSettings.fromSide.setValue(Side.RANDOM);
+        Assertions.assertEquals(false, ge.getCurrentAnswerSideStr() == ge.getCurrentQuestionSideStr());
+
+        ge.gameSettings.fromSide.setValue(Side.RANDOM);
+        Assertions.assertEquals(false, ge.getCurrentAnswerSideStr() == ge.getCurrentQuestionSideStr());
+    }
+
+    @Test
+    @DisplayName("Verify getCurrentSideStr functions random return the same (but different for answer and question) side every time once randomised")
+    void getCurrentAnswerSideStr_3() {
+        GameEngine ge = new GameEngine();
+        ge.newGameFromLineList(List.of(new Line("left", "right", " - ")));
+
+        ge.gameSettings.fromSide.setValue(Side.RANDOM);
+        String answerSide = ge.getCurrentAnswerSideStr();
+        String questionSide = ge.getCurrentQuestionSideStr();
+
+        Assertions.assertEquals(false, answerSide.equals(questionSide));
+
+        Assertions.assertEquals(false, answerSide.equals(questionSide));
+
+        Assertions.assertEquals(false, answerSide.equals(questionSide));
     }
 
     GameEngine mistakeTestSetup(){
@@ -176,4 +211,11 @@ class GameEngineTest {
     @Test
     void newGameFromFileList() {
     }
+
+
+    @Test
+    void getGlobalLinePos() {
+    }
+
+    //TODO: Put @ Display names where appropriate
 }

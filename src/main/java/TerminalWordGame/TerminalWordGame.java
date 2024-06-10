@@ -9,6 +9,24 @@ import WordGameInternals.*;
 
 public class TerminalWordGame {
 //------------------------------ Game loop logic
+    private static String getStats(GameEngine ge){
+        boolean showPos = ge.gameSettings.showPosition.getValue();
+        boolean showMis = ge.gameSettings.showMistakeCount.getValue();
+
+        // Since no new lines are added while the game is running
+        // it's possible to make this more efficient by stashing some of the data here TODO: add it
+        String stats = "";
+        if (showPos){// TODO: split global and in batch pos into two diff settings
+            stats += "G: " + ge.getGlobalLinePos() + "/" + ge.calcTotalLineCount() + " | ";
+            stats += "B: " + String.valueOf(ge.getCurrentInBatchLinePos()+1) + "/" + ge.getCurrentBatchLineCount() +
+                    " | " + String.valueOf(ge.getBatchIndex()+1) + "/" + ge.getBatchCount() + "\n";
+        }
+        if (showMis) {// Todo split and handle show score
+            stats += "M: " + ge.getUniqueMistakeCount() + " | " + ge.getCorrectPercent() + "%";
+        }
+
+        return stats;
+    }
 
     private static void gameLoop(GameEngine gameEngine){
         GameEngine ge = gameEngine;
@@ -18,30 +36,16 @@ public class TerminalWordGame {
             String stage_1 = ge.getQuestionStage(" - ");
             String stage_2 = ge.getAnswerStage(" - ");
 
-            boolean showPos = ge.gameSettings.showPosition.getValue();
-            boolean showMis = ge.gameSettings.showMistakeCount.getValue();
-            boolean autoClear = ge.gameSettings.autoClear.getValue();
-            String stats = "";
-            if (autoClear){};
+            if ( ge.gameSettings.autoClear.getValue() ){};
 
-            // Since no new lines are added while the game is running
-            // it's possible to make this more efficient by stashing some of the data here TODO: add it
-            if (showPos){// TODO: split global and in batch pos into two diff settings
-                stats += "G: " + ge.getGlobalLinePos() + "/" + ge.calcTotalLineCount() + " | ";
-                stats += "B: " + String.valueOf(ge.getCurrentInBatchLinePos()+1) + "/" + ge.getCurrentBatchLineCount() +
-                         " | " + String.valueOf(ge.getBatchIndex()+1) + "/" + ge.getBatchCount() + "\n";
-            }
-            if (showMis) {// Todo split and handle show score
-                stats += "M: " + ge.getUniqueMistakeCount() + " | " + ge.getCorrectPercent() + "%";
-            }
-
+            String stats = getStats(ge);
             if (stats != "") { System.out.println(stats);}
 
-            boolean PLACEHOLDER_typing_mode = false;
-            if (PLACEHOLDER_typing_mode){
+            if (ge.gameSettings.typingMode.getValue()){
                 System.out.print(stage_1);
                 ge.submitAnswer(scanner.nextLine());
                 System.out.println(stage_2);
+                System.out.println("");
             } else {
                 System.out.print(stage_1);
                 scanner.nextLine();
@@ -50,6 +54,11 @@ public class TerminalWordGame {
                 ge.submitAnswer(s);
             }
             ge.nextQuestion();
+
+            if (ge.getGameState().equals( GameState.ENDED )){
+                stats = getStats(ge);
+                if (stats != "") { System.out.println(stats); }
+            }
         }
     }
 

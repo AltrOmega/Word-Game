@@ -60,7 +60,9 @@ public final class GameEngine { // TODO: Make it a Singleton
             this.currentQuestionSide = gameSettings.fromSide.getValue();
             return;
         }
-        this.currentQuestionSide = (Math.random() < 0.5 ? Side.LEFT : Side.RIGHT);
+        if( this.currentQuestionSide == Side.RANDOM){
+            this.currentQuestionSide = (Math.random() < 0.5 ? Side.LEFT : Side.RIGHT);
+        }
     }
 
 
@@ -216,13 +218,23 @@ public final class GameEngine { // TODO: Make it a Singleton
      * @param answer The answer to be validated against the correct answer.
      * @throws IllegalStateException If an answer has already been submitted for the current question.
      */
-    // Todo: add unit test for both modes
-    // Todo no need for handled excep here make it unhandled
-    public void submitAnswer(String answer) throws IllegalStateException{
+    public void submitAnswer(String answer){
         if (answerSubmitted) { throw new IllegalStateException("Answer can be submitted only once per question."); }
 
         if(gameSettings.typingMode.getValue() == true){
-            if (answer.equals(getCurrentAnswerSideStr()) == false){
+            String correct_answer = getCurrentAnswerSideStr();
+            if(gameSettings.whiteSpaceSensitive.getValue() == false){
+                answer = answer.replaceAll("\\s+", "");
+                correct_answer = correct_answer.replaceAll("\\s+", "");
+            }
+
+            if(gameSettings.caseSensitive.getValue() == false){
+                answer = answer.toLowerCase();
+                correct_answer = correct_answer.toLowerCase();
+            }
+
+            if (answer.equals(correct_answer) == false){
+                // TODO: Marker
                 makeMistake();
             }
         } else{
@@ -231,6 +243,7 @@ public final class GameEngine { // TODO: Make it a Singleton
             }
         }
 
+        this.currentQuestionSide = this.gameSettings.fromSide.getValue(); // Marker
         answerSubmitted = true;
     }
 
@@ -298,6 +311,10 @@ public final class GameEngine { // TODO: Make it a Singleton
 
     public int getCurrentInBatchLinePos() { return questions.getCurrentBatch().getLineIndex(); }
 
-    // TODO: write
-    public int getGlobalLinePos(){ return 1;}
+    public int getGlobalLinePos(){
+        int batchSize = this.gameSettings.batchSize.getValue();
+        int batchIndex = getBatchIndex();
+        int ciblp = getCurrentInBatchLinePos();
+        return (batchIndex) * batchSize + ciblp + 1;
+    }
 }

@@ -3,51 +3,51 @@ package WordGameInternals;
 import java.util.List;
 
 public final class GameSettings{
-    Setting<RepeatAtPoint> repeatAtPoint = new Setting<>( // Not implemented
+    public Setting<RepeatAtPoint> repeatAtPoint = new Setting<>( // Not implemented
             "Repeat mistakes",
             "Toggles if you want to repeat mistakes, and if so where.",
             RepeatAtPoint.DO_NOT_REPEAT
     );
 
-    Setting<Integer> batchSize = new Setting<>( // Implemented
+    public Setting<Integer> batchSize = new Setting<>( // Implemented
             "Batch size",
             "Size of a learning batch. If set to 0 disables batch mode.",
             0,
             value -> value >= 0
     );
 
-    Setting<Boolean> randomBatch = new Setting<>( // Implemented
+    public Setting<Boolean> randomBatch = new Setting<>( // Implemented
             "Random batch",
             "Toggles if you want to randomise the order of batches.",
             false
     );
 
-    Setting<Boolean> randomLineInBatch = new Setting<>( // Implemented
+    public Setting<Boolean> randomLineInBatch = new Setting<>( // Implemented
             "Random line in batch",
             "Toggles if you want to randomise the order of lines inside a batch.",
             false
     );
 
-    Setting<Side> fromSide = new Setting<>( // Implemented
+    public Setting<Side> fromSide = new Setting<>( // Implemented
             "From side",
             "The side from which the question is asked.",
             Side.RANDOM
     );
 
-    Setting<Boolean> typingMode = new Setting<>( // Not implemented
+    public Setting<Boolean> typingMode = new Setting<>( // Not implemented
             "Typing mode",
             "Toggles typing mode. You will have to type out the answer.",
             false
     );
 
-    Setting<Boolean> caseSensitive = new Setting<>( // Not implemented
-            "Case sensitive typing",
+    public Setting<Boolean> caseSensitive = new Setting<>( // Not implemented
+            "Case sensitive typing mode",
             "Toggles if the typing mode is case sensitive or not.",
             false
     );
 
-    Setting<Boolean> whiteSpaceSensitive = new Setting<>( // Not implemented
-            "White space sensitive typing",
+    public Setting<Boolean> whiteSpaceSensitive = new Setting<>( // Not implemented
+            "White space sensitive typing mode",
             "Toggles if the typing mode is white space sensitive or not.",
             false
     );
@@ -68,7 +68,7 @@ public final class GameSettings{
 
     // ignoring this setting for now
     // showMisCount shows score as well for now
-    Setting<Boolean> showScore = new Setting<>( // Not Implemented
+    public Setting<Boolean> showScore = new Setting<>( // Not Implemented
             "Show score",
             "Toggles the display of the right answer percentage.",
             true
@@ -80,19 +80,19 @@ public final class GameSettings{
             true
     );
 
-    Setting<List<String>> splits = new Setting<>( // Partly implemented
+    public Setting<List<String>> splits = new Setting<>( // Partly implemented
             "Split Line Strings",
             "Split the line on the first occurrence of one of these when reading the .txt file.",
             List.of(" - ")
     );
 
-    Setting<List<String>> slComments = new Setting<>( // Not implemented
+    public Setting<List<String>> slComments = new Setting<>( // Not implemented
             "Single line comments",
             "Those strings will be accepted as a single line comment.",
             List.of("//")
     );
 
-    Setting<List<List<String>>> mlComments = new Setting<>( // Not implemented
+    public Setting<List<List<String>>> mlComments = new Setting<>( // Not implemented
             "Multi line comments",
             "Those strings will be accepted as a multi line comment.",
             List.of(List.of("/*", "*/"))
@@ -112,9 +112,9 @@ public final class GameSettings{
                 randomBatch,
                 randomLineInBatch,
                 fromSide,
-                //typingMode,
-                //caseSensitive,
-                //whiteSpaceSensitive,
+                typingMode,
+                caseSensitive,
+                whiteSpaceSensitive,
                 showPosition,
                 showMistakeCount,
                 //showScore,

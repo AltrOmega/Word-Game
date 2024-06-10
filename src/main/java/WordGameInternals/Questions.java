@@ -21,6 +21,11 @@ final class Questions {
 
 
 //------------------------------ Constructors
+    Questions(List<Line> lineList, int batchSize){
+        this(lineList, batchSize, false, false);
+    }
+
+
     /**
     * Constructs a Questions object from a list of Line objects, organizing them into batches.
     * Optionally shuffles the batches and lines within batches.
