@@ -10,36 +10,56 @@ import WordGameInternals.*;
 public class TerminalWordGame {
 //------------------------------ Game loop logic
     private static String getStats(GameEngine ge){
-        boolean showPos = ge.gameSettings.showPosition.getValue();
+        boolean showGlobalPos = ge.gameSettings.showGlobalPosition.getValue();
+        boolean showBatchPos = ge.gameSettings.showBatchPosition.getValue();
         boolean showMis = ge.gameSettings.showMistakeCount.getValue();
+        boolean showScore = ge.gameSettings.showScore.getValue();
 
-        // Since no new lines are added while the game is running
-        // it's possible to make this more efficient by stashing some of the data here TODO: add it
         String stats = "";
-        if (showPos){// TODO: split global and in batch pos into two diff settings
-            stats += "G: " + ge.getGlobalLinePos() + "/" + ge.calcTotalLineCount() + " | ";
+        if (showGlobalPos){
+            stats += "G: " + ge.getGlobalLinePos() + "/" + ge.calcTotalLineCount();
+        }
+
+        if (showGlobalPos && showBatchPos){ stats += " | "; }
+
+        if (showBatchPos){
             stats += "B: " + String.valueOf(ge.getCurrentInBatchLinePos()+1) + "/" + ge.getCurrentBatchLineCount() +
-                    " | " + String.valueOf(ge.getBatchIndex()+1) + "/" + ge.getBatchCount() + "\n";
+                    " | " + String.valueOf(ge.getBatchIndex()+1) + "/" + ge.getBatchCount();
         }
-        if (showMis) {// Todo split and handle show score
-            stats += "M: " + ge.getUniqueMistakeCount() + " | " + ge.getCorrectPercent() + "%";
+
+        if(showGlobalPos || showBatchPos){ stats += "\n"; }
+
+
+
+        if (showMis) {
+            stats += "M: " + ge.getUniqueMistakeCount();
         }
+
+        if(showMis && showScore){ stats += " | "; }
+
+        if (showScore) {
+            stats += "S: " + ge.getCorrectPercent() + "%";
+        }
+
+
 
         return stats;
     }
 
     private static void gameLoop(GameEngine gameEngine){
         GameEngine ge = gameEngine;
-        //System.out.println(ge);
         while(ge.getGameState() != GameState.ENDED){
             Scanner scanner = new Scanner(System.in);
             String stage_1 = ge.getQuestionStage(" - ");
             String stage_2 = ge.getAnswerStage(" - ");
+            String stats = "";
 
             if ( ge.gameSettings.autoClear.getValue() ){};
 
-            String stats = getStats(ge);
-            if (stats != "") { System.out.println(stats);}
+            if (!ge.gameSettings.examMode.getValue()){
+                stats = getStats(ge);
+                if (stats != "") { System.out.println(stats);}
+            }
 
             if (ge.gameSettings.typingMode.getValue()){
                 System.out.print(stage_1);
@@ -370,8 +390,6 @@ public class TerminalWordGame {
 
     public static void main(String[] args) {
         GameEngine gameEngine = new GameEngine();
-        gameEngine.gameSettings.showPosition.setValue(true);
-        gameEngine.gameSettings.showMistakeCount.setValue(true);
         mainMenuLoop(gameEngine);
     }
 }

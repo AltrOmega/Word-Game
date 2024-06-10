@@ -34,19 +34,19 @@ public final class GameSettings{
             Side.RANDOM
     );
 
-    public Setting<Boolean> typingMode = new Setting<>( // Not implemented
+    public Setting<Boolean> typingMode = new Setting<>( // Implemented
             "Typing mode",
             "Toggles typing mode. You will have to type out the answer.",
             false
     );
 
-    public Setting<Boolean> caseSensitive = new Setting<>( // Not implemented
+    public Setting<Boolean> caseSensitive = new Setting<>( // Implemented
             "Case sensitive typing mode",
             "Toggles if the typing mode is case sensitive or not.",
             false
     );
 
-    public Setting<Boolean> whiteSpaceSensitive = new Setting<>( // Not implemented
+    public Setting<Boolean> whiteSpaceSensitive = new Setting<>( // Implemented
             "White space sensitive typing mode",
             "Toggles if the typing mode is white space sensitive or not.",
             false
@@ -54,9 +54,15 @@ public final class GameSettings{
 
     //----------
 
-    public Setting<Boolean> showPosition = new Setting<>( // Implemented
-            "Show position",
-            "Toggles the display of the current questions position.",
+    public Setting<Boolean> showGlobalPosition = new Setting<>( // Implemented
+            "Show global position",
+            "Toggles the display of the current questions global position.",
+            true
+    );
+
+    public Setting<Boolean> showBatchPosition = new Setting<>( // Implemented
+            "Show batch position",
+            "Toggles the display of the current questions in batch and batch position.",
             true
     );
 
@@ -66,12 +72,16 @@ public final class GameSettings{
             true
     );
 
-    // ignoring this setting for now
-    // showMisCount shows score as well for now
-    public Setting<Boolean> showScore = new Setting<>( // Not Implemented
+    public Setting<Boolean> showScore = new Setting<>( // Implemented
             "Show score",
             "Toggles the display of the right answer percentage.",
             true
+    );
+
+    public Setting<Boolean> examMode = new Setting<>( // Implemented
+            "Exam mode",
+            "When true, will show statistics only at the end of the game",
+            false
     );
 
     public Setting<Boolean> autoClear = new Setting<>( // Not implemented
@@ -115,9 +125,11 @@ public final class GameSettings{
                 typingMode,
                 caseSensitive,
                 whiteSpaceSensitive,
-                showPosition,
+                showGlobalPosition,
+                showBatchPosition,
                 showMistakeCount,
-                //showScore,
+                showScore,
+                examMode,
                 //autoClear,
                 splits
                 //slComments,
@@ -137,4 +149,3 @@ public final class GameSettings{
         return ret;
     }
 }
-// add show descriptions to setttings TODO
